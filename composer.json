@@ -1,5 +1,5 @@
 {
-    "name": "bit3/contao-theme-reveal-js-basic",
+    "name": "bugbuster/contao-theme-reveal-js-basic",
     "type": "contao-module",
     "description": "reveal-js basic template for the Contao Open Source CMS",
     "keywords": [
@@ -17,15 +17,18 @@
         }
     ],
     "require": {
-        "php": ">=5.3.4",
-        "contao/core": "~3.3",
-        "contao-community-alliance/composer-plugin": "~2.0",
-        "bit3/contao-meta-palettes": "~1.8"
+        "php":">=5.4",
+        "contao/core":">=3.5.1,<4",
+        "contao-community-alliance/composer-plugin": "~2.4",
+        "contao-community-alliance/meta-palettes": "~1.9"
     },
     "autoload": {
         "psr-4": {
             "Bit3\\Contao\\Theme\\RevealJs\\Basic\\": "src/"
         }
+    },
+	"replace": {
+		"bit3/contao-theme-reveal-js-basic":"self.version"
     },
     "extra": {
         "contao": {
