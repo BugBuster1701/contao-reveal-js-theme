@@ -33,14 +33,13 @@
         }
     },
 	"replace": {
-		"bit3/contao-theme-reveal-js-basic":"self.version"
+		  "bit3/contao-theme-reveal-js-basic":"self.version"
     },
     "extra": {
         "contao": {
             "sources": {
                 "module": "system/modules/reveal-js",
-                "assets/reveal-js": "assets/reveal-js",
-                "assets/theme": "assets/reveal-js-theme"
+                "assets/reveal-js": "assets/reveal-js"
             }
         },
         "branch-alias": {
