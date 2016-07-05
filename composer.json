@@ -1,14 +1,19 @@
 {
-    "name": "bugbuster/contao-theme-reveal-js-basic",
+    "name": "bugbuster/contao-reveal-js-theme",
     "type": "contao-module",
     "description": "reveal-js basic template for the Contao Open Source CMS",
     "keywords": [
         "contao",
         "theme",
-        "reveal-js"
+        "reveal.js"
     ],
     "license": "LGPLv3",
     "authors": [
+	{
+		"name":"Glen Langer",
+		"homepage":"http://contao.ninja",
+		"role":"Developer"
+	},
         {
             "name": "Tristan Lins",
             "email": "tristan.lins@bit3.de",
