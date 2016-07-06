@@ -8,10 +8,10 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2016-07-06T21:18:24+02:00
+ * last-updated: 2016-07-06T23:04:36+02:00
  */
 
-
+$GLOBALS['TL_LANG']['tl_layout']['revealJs_legend']  = 'Reveal.js Framework Einstellungen';
 $GLOBALS['TL_LANG']['tl_layout']['useRevealJs']['0'] = 'Reveal.js Framework';
 $GLOBALS['TL_LANG']['tl_layout']['useRevealJs']['1'] = 'Hier können Sie die Komponenten des reveal.js Präsentations-Framework aktivieren.';
 
