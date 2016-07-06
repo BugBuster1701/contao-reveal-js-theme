@@ -29,7 +29,7 @@
     <?php $this->endblock(); ?>
 
 </head>
-<body id="top"class="{{ua::class}}<?php
+<body id="top" class="{{ua::class}}<?php
     if ($this->class) { echo ' ' . $this->class; } ?>"<?php
     if ($this->onload): ?> onload="<?php echo $this->onload; ?>"<?php endif; ?>>
 
