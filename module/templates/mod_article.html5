@@ -1,15 +1,20 @@
 <?php
-if (!isset($GLOBALS['REVEAL_VERTICAL_SLIDE'])) {
+if (!isset($GLOBALS['REVEAL_VERTICAL_SLIDE'])) 
+{
     $GLOBALS['REVEAL_VERTICAL_SLIDE'] = false;
 }
 
-if ($this->revealVerticalSlide == 'start') {
-    if ($GLOBALS['REVEAL_VERTICAL_SLIDE']) {
-        ?></section><?php
+if ($this->revealVerticalSlide == 'start') 
+{
+    if ($GLOBALS['REVEAL_VERTICAL_SLIDE']) 
+    { 
+?>
+</section>
+<?php
     }
-
-    ?><section><?php
-
+?>
+<section>
+<?php
     $GLOBALS['REVEAL_VERTICAL_SLIDE'] = true;
 }
 ?>
@@ -52,10 +57,11 @@ if ($this->revealVerticalSlide == 'start') {
   <?php endif; ?>
 
 </section>
+<?php if ($this->revealVerticalSlide == 'stop' && $GLOBALS['REVEAL_VERTICAL_SLIDE']) 
+{ 
+?>
+</section>
 <?php
-if ($this->revealVerticalSlide == 'stop' && $GLOBALS['REVEAL_VERTICAL_SLIDE']) {
-    ?></section><?php
-
     $GLOBALS['REVEAL_VERTICAL_SLIDE'] = false;
 }
 ?>
