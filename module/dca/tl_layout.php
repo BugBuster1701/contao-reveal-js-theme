@@ -32,12 +32,12 @@ $GLOBALS['TL_DCA']['tl_layout']['fields']['revealJsPrint'] = array(
 
 $GLOBALS['TL_DCA']['tl_layout']['fields']['revealJsTheme'] = array(
     'label'     => &$GLOBALS['TL_LANG']['tl_layout']['revealJsTheme'],
-    'default'   => 'default',
+    'default'   => 'black',
     'exclude'   => true,
     'inputType' => 'select',
-    'options'   => array('default', 'beige', 'blood', 'moon', 'night', 'serif', 'simple', 'sky', 'solarized'),
+    'options'   => array('beige', 'black', 'blood', 'league', 'moon', 'night', 'serif', 'simple', 'sky', 'solarized', 'white'),
     'eval'      => array('includeBlankOption' => true),
-    'sql'       => "varchar(64) NOT NULL default 'default'"
+    'sql'       => "varchar(64) NOT NULL default 'black'"
 );
 
 $GLOBALS['TL_DCA']['tl_layout']['fields']['revealJsSize'] = array(
