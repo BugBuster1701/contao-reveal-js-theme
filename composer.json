@@ -9,11 +9,11 @@
     ],
     "license": "LGPLv3",
     "authors": [
-	{
-		"name":"Glen Langer",
-		"homepage":"http://contao.ninja",
-		"role":"Developer"
-	},
+		{
+			"name":"Glen Langer",
+			"homepage":"http://contao.ninja",
+			"role":"Developer"
+		},
         {
             "name": "Tristan Lins",
             "email": "tristan.lins@bit3.de",
@@ -40,7 +40,13 @@
             "sources": {
                 "module": "system/modules/reveal-js",
                 "assets/reveal-js": "assets/reveal-js"
-            }
+            },
+			"transifex": {
+				"project": "contao-reveal-js-theme",
+				"prefix": "master-",
+				"languages_cto": "module/languages",
+				"languages_tx": ".tx"
+			}
         },
         "branch-alias": {
             "dev-master": "1.0.x-dev",
