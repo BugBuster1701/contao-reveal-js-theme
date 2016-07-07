@@ -33,7 +33,7 @@ class Hooks
                 'expert',
                 array(
                     'revealJs' => array(
-                        'revealJsPrint',
+                        //'revealJsPrint',
                         'revealJsTheme',
                         'revealJsSize',
                         'revealJsMargin',
@@ -248,20 +248,6 @@ class Hooks
 
             if ($layout->revealJsTheme) {
                 array_unshift($GLOBALS['TL_CSS'], $cssPath . 'theme/' . $layout->revealJsTheme . '.css');
-            }
-
-            if ($layout->revealJsPrint == 'pdf') {
-                array_unshift(
-                    $GLOBALS['TL_CSS'],
-                    $cssPath . 'print/pdf.css'
-                );
-            } else {
-                if ($layout->revealJsPrint == 'paper') {
-                    array_unshift(
-                        $GLOBALS['TL_CSS'],
-                        $cssPath . 'print/paper.css'
-                    );
-                }
             }
 
             array_unshift(
