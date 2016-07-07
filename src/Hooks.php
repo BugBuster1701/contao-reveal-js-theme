@@ -1,6 +1,6 @@
 <?php
 
-namespace Bit3\Contao\Theme\RevealJs\Basic;
+namespace BugBuster\RevealJs\Theme;
 
 class Hooks
 {
@@ -332,7 +332,7 @@ class Hooks
 Reveal.initialize({$options});
 </script>
 EOF;
-            $GLOBALS['TL_HOOKS']['parseTemplate'][] = array('Bit3\Contao\Theme\RevealJs\Basic\Hooks', 'parseTemplate');
+            $GLOBALS['TL_HOOKS']['parseTemplate'][] = array('BugBuster\RevealJs\Theme\Hooks', 'parseTemplate');
         }
     }
 

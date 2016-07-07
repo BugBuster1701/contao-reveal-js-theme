@@ -28,7 +28,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Bit3\\Contao\\Theme\\RevealJs\\Basic\\": "src/"
+            "BugBuster\\RevealJs\\Theme\\": "src/"
         }
     },
     "conflict": {

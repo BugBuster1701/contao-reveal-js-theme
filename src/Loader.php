@@ -1,6 +1,6 @@
 <?php
 
-namespace Bit3\Contao\Theme\RevealJs\Basic;
+namespace BugBuster\RevealJs\Theme;
 
 class Loader
 {

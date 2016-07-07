@@ -1,12 +1,12 @@
 <?php
 
 $GLOBALS['TL_DCA']['tl_layout']['config']['onload_callback'][] = array(
-    'Bit3\Contao\Theme\RevealJs\Basic\Hooks',
+    'BugBuster\RevealJs\Theme\Hooks',
     'loadLayoutDca'
 );
 
 $GLOBALS['TL_DCA']['tl_layout']['config']['onsubmit_callback'][] = array(
-    'Bit3\Contao\Theme\RevealJs\Basic\Hooks',
+    'BugBuster\RevealJs\Theme\Hooks',
     'saveLayout'
 );
 
