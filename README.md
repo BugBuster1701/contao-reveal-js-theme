@@ -20,7 +20,8 @@ wieder zu funktionieren.
 ### Version 1.x.x (in Planung)
 
 * Nicht mehr abwärtskompatibel zur Originalversion (Bit3) oder zur Version 0.1.x
-* Namespace Änderung (Vendor) um parallele Installation zur Version 0.1.x zu ermöglichen
+* Parallele Installation zur Originalversion (Bit3) oder zur Version 0.1.x nicht möglich!
+* Namespace Änderung (Vendor) 
 * Vertical Slides über mehrere Textelemente, nicht mehr über Artikel mit Start/Stop Flag
 * Plugins werden geladen, eventuell wählbar
 * Print-PDF Fähigkeit wie beim Original von reveal.js über manuellem Parameter
