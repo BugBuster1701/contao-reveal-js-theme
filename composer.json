@@ -16,7 +16,6 @@
 		},
         {
             "name": "Tristan Lins",
-            "email": "tristan.lins@bit3.de",
             "homepage": "http://bit3.de",
             "role": "Developer"
         }
@@ -32,9 +31,10 @@
             "Bit3\\Contao\\Theme\\RevealJs\\Basic\\": "src/"
         }
     },
-	"replace": {
-		  "bit3/contao-theme-reveal-js-basic":"self.version"
-    },
+    "conflict": {
+        "bit3/contao-theme-reveal-js-basic":"*",
+        "bugbuster/contao-reveal-js-theme":"0.1.*"
+	},
     "extra": {
         "contao": {
             "sources": {
