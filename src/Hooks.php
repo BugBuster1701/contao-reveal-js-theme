@@ -254,6 +254,11 @@ class Hooks
 
             array_unshift(
                 $GLOBALS['TL_CSS'],
+                $libPath . 'css/zenburn.css'
+            );
+            
+            array_unshift(
+                $GLOBALS['TL_CSS'],
                 $cssPath . 'reveal' . ($GLOBALS['TL_CONFIG']['revealJsUseMinified'] ? '.min' : '') . '.css'
             );
             
