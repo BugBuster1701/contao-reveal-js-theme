@@ -145,8 +145,8 @@ class Hooks
 
         if ($layout->useRevealJs) 
         {
-            $slide = 0;
-            $page  = 0;
+            $pages = 0;
+            $slide  = 0;
             
             $predecessors = \ArticleModel::findBy(
                             array('pid = ?'  , 'sorting <= ?'),
@@ -156,12 +156,12 @@ class Hooks
 
             if ($predecessors) 
             {
-                $page = $predecessors->count();
+                $slide = $predecessors->count();
             }
             
-            $slide = \ContentModel::countPublishedByPidAndTable($row['id'], 'tl_article');
+            $pages = \ContentModel::countPublishedByPidAndTable($row['id'], 'tl_article');
 
-            $label .= ' ' . sprintf($GLOBALS['TL_LANG']['tl_article']['revealSlideNumber'], $page, $slide);
+            $label .= ' ' . sprintf($GLOBALS['TL_LANG']['tl_article']['revealSlideNumber'], $slide, $pages);
         }
         
         return $label;
