@@ -241,6 +241,8 @@ class Hooks
             $basePath = $GLOBALS['TL_CONFIG']['revealJsPath'] . '/' . $GLOBALS['TL_CONFIG']['revealJsVersion'];
             $cssPath  = $basePath . '/css/';
             $jsPath   = $basePath . '/js/';
+            $libPath  = $basePath . '/lib/';
+            
 
             if (!is_array($GLOBALS['TL_CSS'])) {
                 $GLOBALS['TL_CSS'] = (array) $GLOBALS['TL_CSS'];
@@ -254,7 +256,7 @@ class Hooks
                 $GLOBALS['TL_CSS'],
                 $cssPath . 'reveal' . ($GLOBALS['TL_CONFIG']['revealJsUseMinified'] ? '.min' : '') . '.css'
             );
-
+            
             if (!is_array($GLOBALS['TL_JAVASCRIPT'])) {
                 $GLOBALS['TL_JAVASCRIPT'] = (array) $GLOBALS['TL_JAVASCRIPT'];
             }
@@ -264,6 +266,11 @@ class Hooks
                 $jsPath . 'reveal' . ($GLOBALS['TL_CONFIG']['revealJsUseMinified'] ? '.min' : '') . '.js'
             );
 
+            array_unshift(
+                $GLOBALS['TL_JAVASCRIPT'],
+                $libPath . 'js/head.min.js'
+            );
+            
             if (!is_array($GLOBALS['TL_BODY'])) {
                 $GLOBALS['TL_BODY'] = (array) $GLOBALS['TL_BODY'];
             }
@@ -310,7 +317,7 @@ class Hooks
             if (strlen($scale[1])) {
                 $options['maxScale'] = (double) $scale[1];
             }
-
+/*
             //Plugins
             $options['dependencies'] = array (
                 array(
@@ -345,11 +352,131 @@ class Hooks
                 
             );
             
-            $options = json_encode($options,JSON_UNESCAPED_SLASHES);
-
+            //$options = json_encode($options,JSON_UNESCAPED_SLASHES);
+*/
             $GLOBALS['TL_BODY'][]                   = <<<EOF
 <script>
-Reveal.initialize({$options});
+Reveal.initialize({
+
+    // Display controls in the bottom right corner
+    controls: true,
+
+    // Display a presentation progress bar
+    progress: true,
+
+    // Display the page number of the current slide
+    slideNumber: true, // default: false,
+
+    // Push each slide change to the browser history
+    history: true, // default: false
+
+    // Enable keyboard shortcuts for navigation
+    keyboard: true,
+
+    // Enable the slide overview mode
+    overview: true,
+
+    // Vertical centering of slides
+    center: true,
+
+    // Enables touch navigation on devices with touch input
+    touch: true,
+
+    // Loop the presentation
+    loop: false,
+
+    // Change the presentation direction to be RTL
+    rtl: false,
+
+    // Turns fragments on and off globally
+    fragments: true,
+
+    // Flags if the presentation is running in an embedded mode,
+    // i.e. contained within a limited portion of the screen
+    embedded: false,
+
+    // Flags if we should show a help overlay when the questionmark
+    // key is pressed
+    help: true,
+
+    // Flags if speaker notes should be visible to all viewers
+    showNotes: false,
+
+    // Number of milliseconds between automatically proceeding to the
+    // next slide, disabled when set to 0, this value can be overwritten
+    // by using a data-autoslide attribute on your slides
+    autoSlide: 0,
+
+    // Stop auto-sliding after user input
+    autoSlideStoppable: true,
+
+    // Enable slide navigation via mouse wheel
+    mouseWheel: false,
+
+    // Hides the address bar on mobile devices
+    hideAddressBar: true,
+
+    // Opens links in an iframe preview overlay
+    previewLinks: false,
+
+    // Transition style
+    transition: 'slide', // default/none/fade/->slide<-/convex/concave/zoom
+
+    // Transition speed
+    transitionSpeed: 'default', // default/fast/slow
+
+    // Transition style for full page slide backgrounds
+    backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+    // Number of slides away from the current that are visible
+    viewDistance: 3,
+
+    // Parallax background image
+    parallaxBackgroundImage: '', // e.g. "'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg'"
+
+    // Parallax background size
+    parallaxBackgroundSize: '', // CSS syntax, e.g. "2100px 900px"
+
+    // Number of pixels to move the parallax background per slide
+    // - Calculated automatically unless specified
+    // - Set to 0 to disable movement along an axis
+    parallaxBackgroundHorizontal: null,
+    parallaxBackgroundVertical: null,
+    
+    // The "normal" size of the presentation, aspect ratio will be preserved
+    // when the presentation is scaled to fit different resolutions. Can be
+    // specified using percentage units.
+    width: 960,
+    height: 700,
+
+    // Factor of the display size that should remain empty around the content
+    margin: 0.1,
+
+    // Bounds for smallest/largest possible scale to apply to content
+    minScale: 0.2,
+    maxScale: 1.5,
+    
+    dependencies: [
+        // Cross-browser shim that fully implements classList - https://github.com/eligrey/classList.js/
+        //{ src: '<?= $basePath ?>/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+
+        // Interpret Markdown in <section> elements
+        { src: '<?= $basePath ?>/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+        { src: '<?= $basePath ?>/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+
+        // Syntax highlight for <code> elements
+        { src: '<?= $basePath ?>/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+
+        // Zoom in and out with Alt+click
+        { src: '<?= $basePath ?>/plugin/zoom-js/zoom.js', async: true },
+
+        // Speaker notes
+        { src: '<?= $basePath ?>/plugin/notes/notes.js', async: true } //,
+
+        // MathJax
+        //{ src: '<?= $basePath ?>/plugin/math/math.js', async: true }
+    ]
+});
 </script>
 EOF;
             $GLOBALS['TL_HOOKS']['parseTemplate'][] = array('BugBuster\RevealJs\Theme\Hooks', 'parseTemplate');
