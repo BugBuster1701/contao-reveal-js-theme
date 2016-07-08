@@ -10,7 +10,8 @@ class Hooks
                            ->prepare('SELECT * FROM tl_layout WHERE id=?')
                            ->execute($dc->id);
 
-        if ($layout->useRevealJs) {
+        if ($layout->useRevealJs) 
+        {
             Loader::load();
 
             // {title_legend},name;
@@ -33,7 +34,6 @@ class Hooks
                 'expert',
                 array(
                     'revealJs' => array(
-                        //'revealJsPrint',
                         'revealJsTheme',
                         'revealJsSize',
                         'revealJsMargin',
@@ -77,7 +77,8 @@ class Hooks
                            ->prepare('SELECT * FROM tl_layout WHERE id=?')
                            ->execute($dc->id);
 
-        if ($layout->useRevealJs) {
+        if ($layout->useRevealJs) 
+        {
             $update = array();
 
             if ($layout->sections) {
@@ -128,16 +129,6 @@ class Hooks
             }
         }
 
-        if ($layout && $layout->useRevealJs) {
-            \MetaPalettes::appendFields(
-                'tl_article',
-                'default',
-                'template',
-                array(
-                    'revealVerticalSlide'
-                )
-            );
-        }
     }
 
     public function getArticleLabel($row, $label)
@@ -146,88 +137,31 @@ class Hooks
         $layout = $page->getRelated('layout');
 
         $callback = $GLOBALS['TL_DCA']['tl_article']['list']['label']['reveal_original_label_callback'];
-        if (is_array($callback)) {
+        if (is_array($callback)) 
+        {
             $callback[0] = \System::importStatic($callback[0]);
         }
         $label = call_user_func($callback, $row, $label);
 
-        if ($layout->useRevealJs) {
-            if ($row['revealVerticalSlide'] == 'start') {
-                $label = '&boxhd; ' . $label;
-            } else {
-                if ($row['revealVerticalSlide'] == 'stop') {
-                    $label = '&boxhu; ' . $label;
-                } else {
-                    $predecessors = \ArticleModel::findBy(
-                        array('pid = ?', 'sorting < ?', 'revealVerticalSlide != ?'),
-                        array($row['pid'], $row['sorting'], ''),
-                        array('order' => 'sorting DESC', 'limit' => 1)
-                    );
-
-                    if ($predecessors && $predecessors->revealVerticalSlide == 'start') {
-                        $successor = \ArticleModel::findOneBy(
-                            array('pid = ?', 'sorting > ?'),
+        if ($layout->useRevealJs) 
+        {
+            $slide = 0;
+            $page  = 0;
+            
+            $predecessors = \ArticleModel::findBy(
+                            array('pid = ?'  , 'sorting <= ?'),
                             array($row['pid'], $row['sorting']),
-                            array('order' => 'sorting', 'limit' => 1)
+                            array('order' => 'sorting')
                         );
 
-                        if ($successor && $successor->revealVerticalSlide == 'start') {
-                            $label = '&boxhu; ' . $label;
-                        } else {
-                            $label = '&boxv; ' . $label;
-                        }
-                    }
-                }
+            if ($predecessors) 
+            {
+                $page = $predecessors->count();
             }
+            
+            $slide = \ContentModel::countPublishedByPidAndTable($row['id'], 'tl_article');
 
-            $predecessors = \ArticleModel::findBy(
-                array('pid = ?', 'sorting < ?'),
-                array($row['pid'], $row['sorting']),
-                array('order' => 'sorting')
-            );
-
-            if ($predecessors) {
-                $slide = $predecessors->count();
-                $page  = -1;
-
-                $inVertical = false;
-                foreach ($predecessors as $predecessor) {
-                    if ($predecessor->revealVerticalSlide == 'start') {
-                        $inVertical = true;
-                    }
-
-                    if ($inVertical && $predecessor->revealVerticalSlide != 'start') {
-                        $page += .001;
-                    } else {
-                        $page = (int) ($page + 1);
-                    }
-
-                    if ($predecessor->revealVerticalSlide == 'stop') {
-                        $inVertical = false;
-                    }
-                }
-
-                if ($inVertical && $row['revealVerticalSlide'] != 'start') {
-                    $page += .001;
-                } else {
-                    $page = (int) ($page + 1);
-                }
-
-                if ($inVertical) {
-                    $pageMain = (int) $page;
-                    $pageSub  = (int) (($page - $pageMain) * 1000);
-
-                    $page = sprintf('%d-%d', $pageMain, $pageSub);
-                } else {
-                    $page = (int) $page;
-                }
-
-            } else {
-                $slide = 0;
-                $page  = 0;
-            }
-
-            $label .= ' ' . sprintf($GLOBALS['TL_LANG']['tl_article']['revealSlideNumber'], $slide, $page);
+            $label .= ' ' . sprintf($GLOBALS['TL_LANG']['tl_article']['revealSlideNumber'], $page, $slide);
         }
         
         return $label;
@@ -235,7 +169,8 @@ class Hooks
 
     public function getPageLayout(\PageModel $page, \LayoutModel $layout, \PageRegular $pageRegular)
     {
-        if ($layout->useRevealJs) {
+        if ($layout->useRevealJs) 
+        {
             Loader::load();
 
             $basePath = $GLOBALS['TL_CONFIG']['revealJsPath'] . '/' . $GLOBALS['TL_CONFIG']['revealJsVersion'];
@@ -328,7 +263,7 @@ class Hooks
                 $options_maxScale = (double) $scale[1];
             }
 
-            $GLOBALS['TL_BODY'][]                   = <<<EOF
+            $GLOBALS['TL_BODY'][] = <<<EOF
 <script>
 Reveal.initialize({
 

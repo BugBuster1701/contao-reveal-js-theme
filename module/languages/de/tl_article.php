@@ -12,5 +12,5 @@
  */
 
 
-$GLOBALS['TL_LANG']['tl_article']['revealSlideNumber'] = 'Slide %s / Seite %s';
+$GLOBALS['TL_LANG']['tl_article']['revealSlideNumber'] = 'Seite %s / Slides %s';
 
