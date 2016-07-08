@@ -311,7 +311,41 @@ class Hooks
                 $options['maxScale'] = (double) $scale[1];
             }
 
-            $options = json_encode($options);
+            //Plugins
+            $options['dependencies'] = array (
+                array(
+                	'src' => $jsPath.'lib/js/classList.js', 
+                    'condition' => 'function() { return !document.body.classList; }'
+                ),
+                array(
+                    'src' => $jsPath.'plugin/markdown/marked.js',
+                    'condition' => "function() { return !!document.querySelector( '[data-markdown]' ); }"
+                ),
+                array(
+                    'src' => $jsPath.'plugin/markdown/markdown.js',
+                    'condition' => "function() { return !!document.querySelector( '[data-markdown]' ); }"
+                ),
+                array(
+                    'src'      => $jsPath.'plugin/highlight/highlight.js',
+                    'async'    => true,
+                    'callback' => 'function() { hljs.initHighlightingOnLoad(); }'
+                ),
+                array(
+                    'src' => $jsPath.'plugin/zoom-js/zoom.js',
+                    'async' => true
+                ),
+                array(
+                	'src' => $jsPath.'plugin/notes/notes.js',
+                    'async' => true
+                ),
+                array(
+                    'src' => $jsPath.'plugin/math/math.js',
+                    'async' => true
+                )
+                
+            );
+            
+            $options = json_encode($options,JSON_UNESCAPED_SLASHES);
 
             $GLOBALS['TL_BODY'][]                   = <<<EOF
 <script>
