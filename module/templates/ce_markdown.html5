@@ -5,7 +5,7 @@
   <<?= $this->hl ?>><?= $this->headline ?></<?= $this->hl ?>>
 <?php endif; ?>
 
-  <div><hr><?= $this->content ?></div>
+  <div><?= $this->content ?></div>
 
 </section>
 <!-- /ce_markdown -->
