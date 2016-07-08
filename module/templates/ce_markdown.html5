@@ -1,11 +1,7 @@
 <!-- ce_markdown -->
 <section data-markdown data-separator="---">
-<?php $this->extend('block_searchable'); ?>
 
-<?php $this->block('content'); ?>
+  <?= $this->content ?>
 
-  <div><?= $this->content ?></div>
-
-<?php $this->endblock(); ?>
 </section>
 <!-- /ce_markdown -->
