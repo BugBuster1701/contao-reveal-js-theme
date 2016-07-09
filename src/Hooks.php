@@ -105,6 +105,10 @@ class Hooks
             if ($layout->static) {
                 $update['static'] = '';
             }
+            if ($layout->viewport == '') {
+            	$update['viewport'] = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui';
+            }
+            
 
             if (count($update)) {
                 \Database::getInstance()
