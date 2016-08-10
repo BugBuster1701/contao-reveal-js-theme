@@ -173,6 +173,7 @@ class Hooks
 
     public function getPageLayout(\PageModel $page, \LayoutModel $layout, \PageRegular $pageRegular)
     {
+        unset($page); // argument is never used 
         if ($layout->useRevealJs) 
         {
             Loader::load();
