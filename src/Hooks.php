@@ -71,7 +71,7 @@ class Hooks
         }
     }
 
-    public function saveLayout($dc)
+    public function saveLayout(\DataContainer $dc)
     {
         $layout = \Database::getInstance()
                            ->prepare('SELECT * FROM tl_layout WHERE id=?')
@@ -119,7 +119,7 @@ class Hooks
         }
     }
 
-    public function loadArticleDca($dc)
+    public function loadArticleDca(\DataContainer $dc)
     {
         $layout  = null;
         $article = \ArticleModel::findByPk($dc->id);
@@ -173,7 +173,8 @@ class Hooks
 
     public function getPageLayout(\PageModel $page, \LayoutModel $layout, \PageRegular $pageRegular)
     {
-        unset($page); // argument is never used 
+        unset($page);        // argument is never used
+        unset($pageRegular); // argument is never used
         if ($layout->useRevealJs) 
         {
             Loader::load();
