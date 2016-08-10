@@ -4,7 +4,7 @@ namespace BugBuster\RevealJs\Theme;
 
 class Hooks
 {
-    public function loadLayoutDca($dc)
+    public function loadLayoutDca(\PageModel $dc)
     {
         $layout = \Database::getInstance()
                            ->prepare('SELECT * FROM tl_layout WHERE id=?')
