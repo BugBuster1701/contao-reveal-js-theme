@@ -4,7 +4,7 @@ namespace BugBuster\RevealJs\Theme;
 
 class Hooks
 {
-    public function loadLayoutDca(\PageModel $dc)
+    public function loadLayoutDca(\DC_Table $dc)
     {
         $layout = \Database::getInstance()
                            ->prepare('SELECT * FROM tl_layout WHERE id=?')
@@ -119,6 +119,8 @@ class Hooks
         }
     }
 
+    // ['TL_DCA']['tl_article']['config']['onload_callback'][]
+    // deprecated
     public function loadArticleDca(\DataContainer $dc)
     {
         $layout  = null;
