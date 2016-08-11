@@ -1,16 +1,17 @@
 <?php
 
-namespace Bit3\Contao\Theme\RevealJs\Basic;
+namespace BugBuster\RevealJs\Theme;
 
 class Hooks
 {
-    public function loadLayoutDca($dc)
+    public function loadLayoutDca(\DC_Table $dc)
     {
         $layout = \Database::getInstance()
                            ->prepare('SELECT * FROM tl_layout WHERE id=?')
                            ->execute($dc->id);
 
-        if ($layout->useRevealJs) {
+        if ($layout->useRevealJs) 
+        {
             Loader::load();
 
             // {title_legend},name;
@@ -33,7 +34,6 @@ class Hooks
                 'expert',
                 array(
                     'revealJs' => array(
-                        'revealJsPrint',
                         'revealJsTheme',
                         'revealJsSize',
                         'revealJsMargin',
@@ -71,13 +71,14 @@ class Hooks
         }
     }
 
-    public function saveLayout($dc)
+    public function saveLayout(\DataContainer $dc)
     {
         $layout = \Database::getInstance()
                            ->prepare('SELECT * FROM tl_layout WHERE id=?')
                            ->execute($dc->id);
 
-        if ($layout->useRevealJs) {
+        if ($layout->useRevealJs) 
+        {
             $update = array();
 
             if ($layout->sections) {
@@ -104,6 +105,10 @@ class Hooks
             if ($layout->static) {
                 $update['static'] = '';
             }
+            if ($layout->viewport == '') {
+            	$update['viewport'] = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui';
+            }
+            
 
             if (count($update)) {
                 \Database::getInstance()
@@ -114,7 +119,9 @@ class Hooks
         }
     }
 
-    public function loadArticleDca($dc)
+    // ['TL_DCA']['tl_article']['config']['onload_callback'][]
+    // deprecated
+    public function loadArticleDca(\DataContainer $dc)
     {
         $layout  = null;
         $article = \ArticleModel::findByPk($dc->id);
@@ -128,16 +135,6 @@ class Hooks
             }
         }
 
-        if ($layout && $layout->useRevealJs) {
-            \MetaPalettes::appendFields(
-                'tl_article',
-                'default',
-                'template',
-                array(
-                    'revealVerticalSlide'
-                )
-            );
-        }
     }
 
     public function getArticleLabel($row, $label)
@@ -146,88 +143,31 @@ class Hooks
         $layout = $page->getRelated('layout');
 
         $callback = $GLOBALS['TL_DCA']['tl_article']['list']['label']['reveal_original_label_callback'];
-        if (is_array($callback)) {
+        if (is_array($callback)) 
+        {
             $callback[0] = \System::importStatic($callback[0]);
         }
         $label = call_user_func($callback, $row, $label);
 
-        if ($layout->useRevealJs) {
-            if ($row['revealVerticalSlide'] == 'start') {
-                $label = '&boxhd; ' . $label;
-            } else {
-                if ($row['revealVerticalSlide'] == 'stop') {
-                    $label = '&boxhu; ' . $label;
-                } else {
-                    $predecessors = \ArticleModel::findBy(
-                        array('pid = ?', 'sorting < ?', 'revealVerticalSlide != ?'),
-                        array($row['pid'], $row['sorting'], ''),
-                        array('order' => 'sorting DESC', 'limit' => 1)
-                    );
-
-                    if ($predecessors && $predecessors->revealVerticalSlide == 'start') {
-                        $successor = \ArticleModel::findOneBy(
-                            array('pid = ?', 'sorting > ?'),
+        if ($layout->useRevealJs) 
+        {
+            $pages = 0;
+            $slide  = 0;
+            
+            $predecessors = \ArticleModel::findBy(
+                            array('pid = ?'  , 'sorting <= ?'),
                             array($row['pid'], $row['sorting']),
-                            array('order' => 'sorting', 'limit' => 1)
+                            array('order' => 'sorting')
                         );
 
-                        if ($successor && $successor->revealVerticalSlide == 'start') {
-                            $label = '&boxhu; ' . $label;
-                        } else {
-                            $label = '&boxv; ' . $label;
-                        }
-                    }
-                }
-            }
-
-            $predecessors = \ArticleModel::findBy(
-                array('pid = ?', 'sorting < ?'),
-                array($row['pid'], $row['sorting']),
-                array('order' => 'sorting')
-            );
-
-            if ($predecessors) {
+            if ($predecessors) 
+            {
                 $slide = $predecessors->count();
-                $page  = -1;
-
-                $inVertical = false;
-                foreach ($predecessors as $predecessor) {
-                    if ($predecessor->revealVerticalSlide == 'start') {
-                        $inVertical = true;
-                    }
-
-                    if ($inVertical && $predecessor->revealVerticalSlide != 'start') {
-                        $page += .001;
-                    } else {
-                        $page = (int) ($page + 1);
-                    }
-
-                    if ($predecessor->revealVerticalSlide == 'stop') {
-                        $inVertical = false;
-                    }
-                }
-
-                if ($inVertical && $row['revealVerticalSlide'] != 'start') {
-                    $page += .001;
-                } else {
-                    $page = (int) ($page + 1);
-                }
-
-                if ($inVertical) {
-                    $pageMain = (int) $page;
-                    $pageSub  = (int) (($page - $pageMain) * 1000);
-
-                    $page = sprintf('%d-%d', $pageMain, $pageSub);
-                } else {
-                    $page = (int) $page;
-                }
-
-            } else {
-                $slide = 0;
-                $page  = 0;
             }
+            
+            $pages = \ContentModel::countPublishedByPidAndTable($row['id'], 'tl_article');
 
-            $label .= ' ' . sprintf($GLOBALS['TL_LANG']['tl_article']['revealSlideNumber'], $slide, $page);
+            $label .= ' ' . sprintf($GLOBALS['TL_LANG']['tl_article']['revealSlideNumber'], $slide, $pages);
         }
         
         return $label;
@@ -235,12 +175,17 @@ class Hooks
 
     public function getPageLayout(\PageModel $page, \LayoutModel $layout, \PageRegular $pageRegular)
     {
-        if ($layout->useRevealJs) {
+        unset($page);        // argument is never used
+        unset($pageRegular); // argument is never used
+        if ($layout->useRevealJs) 
+        {
             Loader::load();
 
             $basePath = $GLOBALS['TL_CONFIG']['revealJsPath'] . '/' . $GLOBALS['TL_CONFIG']['revealJsVersion'];
             $cssPath  = $basePath . '/css/';
             $jsPath   = $basePath . '/js/';
+            $libPath  = $basePath . '/lib/';
+            
 
             if (!is_array($GLOBALS['TL_CSS'])) {
                 $GLOBALS['TL_CSS'] = (array) $GLOBALS['TL_CSS'];
@@ -250,25 +195,16 @@ class Hooks
                 array_unshift($GLOBALS['TL_CSS'], $cssPath . 'theme/' . $layout->revealJsTheme . '.css');
             }
 
-            if ($layout->revealJsPrint == 'pdf') {
-                array_unshift(
-                    $GLOBALS['TL_CSS'],
-                    $cssPath . 'print/pdf.css'
-                );
-            } else {
-                if ($layout->revealJsPrint == 'paper') {
-                    array_unshift(
-                        $GLOBALS['TL_CSS'],
-                        $cssPath . 'print/paper.css'
-                    );
-                }
-            }
-
+            array_unshift(
+                $GLOBALS['TL_CSS'],
+                $libPath . 'css/zenburn.css'
+            );
+            
             array_unshift(
                 $GLOBALS['TL_CSS'],
                 $cssPath . 'reveal' . ($GLOBALS['TL_CONFIG']['revealJsUseMinified'] ? '.min' : '') . '.css'
             );
-
+            
             if (!is_array($GLOBALS['TL_JAVASCRIPT'])) {
                 $GLOBALS['TL_JAVASCRIPT'] = (array) $GLOBALS['TL_JAVASCRIPT'];
             }
@@ -278,61 +214,189 @@ class Hooks
                 $jsPath . 'reveal' . ($GLOBALS['TL_CONFIG']['revealJsUseMinified'] ? '.min' : '') . '.js'
             );
 
+            array_unshift(
+                $GLOBALS['TL_JAVASCRIPT'],
+                $libPath . 'js/head.min.js'
+            );
+            
             if (!is_array($GLOBALS['TL_BODY'])) {
                 $GLOBALS['TL_BODY'] = (array) $GLOBALS['TL_BODY'];
             }
 
-            $options = array(
-                'controls'             => (bool) $layout->revealJsControls,
-                'progress'             => (bool) $layout->revealJsProgress,
-                'slideNumber'          => (bool) $layout->revealJsSlideNumber,
-                'history'              => (bool) $layout->revealJsHistory,
-                'keyboard'             => (bool) $layout->revealJsKeyboard,
-                'overview'             => (bool) $layout->revealJsOverview,
-                'center'               => (bool) $layout->revealJsCenter,
-                'touch'                => (bool) $layout->revealJsTouch,
-                'loop'                 => (bool) $layout->revealJsLoop,
-                'rtl'                  => (bool) $layout->revealJsRtl,
-                'fragments'            => (bool) $layout->revealJsFragments,
-                'embedded'             => (bool) $layout->revealJsEmbedded,
-                'autoSlide'            => (int) $layout->revealJsAutoSlide,
-                'autoSlideStoppable'   => (bool) $layout->revealJsAutoSlideStoppable,
-                'mouseWheel'           => (bool) $layout->revealJsMouseWheel,
-                'hideAddressBar'       => (bool) $layout->revealJsHideAddressBar,
-                'previewLinks'         => (bool) $layout->revealJsPreviewLinks,
-                'transition'           => (string) $layout->revealJsTransition,
-                'transitionSpeed'      => (string) $layout->revealJsTransitionSpeed,
-                'backgroundTransition' => (string) $layout->revealJsBackgroundTransition,
-                'viewDistance'         => (int) $layout->revealJsViewDistance,
-            );
+            $options_controls             = (int) $layout->revealJsControls;
+            $options_progress             = (int) $layout->revealJsProgress;
+            $options_slideNumber          = (int) $layout->revealJsSlideNumber;
+            $options_history              = (int) $layout->revealJsHistory;
+            $options_keyboard             = (int) $layout->revealJsKeyboard;
+            $options_overview             = (int) $layout->revealJsOverview;
+            $options_center               = (int) $layout->revealJsCenter;
+            $options_touch                = (int) $layout->revealJsTouch;
+            $options_loop                 = (int) $layout->revealJsLoop;
+            $options_rtl                  = (int) $layout->revealJsRtl;
+            $options_fragments            = (int) $layout->revealJsFragments;
+            $options_embedded             = (int) $layout->revealJsEmbedded;
+            $options_autoSlide            = (int) $layout->revealJsAutoSlide;
+            $options_autoSlideStoppable   = (int) $layout->revealJsAutoSlideStoppable;
+            $options_mouseWheel           = (int) $layout->revealJsMouseWheel;
+            $options_hideAddressBar       = (int) $layout->revealJsHideAddressBar;
+            $options_previewLinks         = (int) $layout->revealJsPreviewLinks;
+            $options_transition           = (string) $layout->revealJsTransition;
+            $options_transitionSpeed      = (string) $layout->revealJsTransitionSpeed;
+            $options_backgroundTransition = (string) $layout->revealJsBackgroundTransition;
+            $options_viewDistance         = (int) $layout->revealJsViewDistance;
+            
 
             $size  = deserialize($layout->revealJsSize, true);
             $scale = deserialize($layout->revealJsScale, true);
 
+            $options_width    = 960;
+            $options_height   = 700;
+            $options_margin   = (double) '0.1';
+            $options_minScale = (double) '0.2';
+            $options_maxScale = (double) '1.5';
+            
             if (strlen($size[0])) {
-                $options['width'] = (int) $size[0];
+                $options_width = (int) $size[0];
             }
             if (strlen($size[1])) {
-                $options['height'] = (int) $size[1];
+                $options_height = (int) $size[1];
             }
             if (strlen($layout->revealJsMargin)) {
-                $options['margin'] = (double) $layout->revealJsMargin;
+                $options_margin = (double) $layout->revealJsMargin;
             }
             if (strlen($scale[0])) {
-                $options['minScale'] = (double) $scale[0];
+                $options_minScale = (double) $scale[0];
             }
             if (strlen($scale[1])) {
-                $options['maxScale'] = (double) $scale[1];
+                $options_maxScale = (double) $scale[1];
             }
 
-            $options = json_encode($options);
-
-            $GLOBALS['TL_BODY'][]                   = <<<EOF
+            $GLOBALS['TL_BODY'][] = <<<EOF
 <script>
-Reveal.initialize({$options});
+Reveal.initialize({
+
+    // Display controls in the bottom right corner
+    controls: $options_controls,
+
+    // Display a presentation progress bar
+    progress: $options_progress,
+
+    // Display the page number of the current slide
+    slideNumber: $options_slideNumber, // default: false,
+
+    // Push each slide change to the browser history
+    history: $options_history, // default: false
+
+    // Enable keyboard shortcuts for navigation
+    keyboard: $options_keyboard,
+
+    // Enable the slide overview mode
+    overview: $options_overview,
+
+    // Vertical centering of slides
+    center: $options_center,
+
+    // Enables touch navigation on devices with touch input
+    touch: $options_touch,
+
+    // Loop the presentation
+    loop: $options_loop,
+
+    // Change the presentation direction to be RTL
+    rtl: $options_rtl,
+
+    // Turns fragments on and off globally
+    fragments: $options_fragments,
+
+    // Flags if the presentation is running in an embedded mode,
+    // i.e. contained within a limited portion of the screen
+    embedded: $options_embedded,
+
+    // Flags if we should show a help overlay when the questionmark
+    // key is pressed
+    help: true,
+
+    // Flags if speaker notes should be visible to all viewers
+    showNotes: false,
+
+    // Number of milliseconds between automatically proceeding to the
+    // next slide, disabled when set to 0, this value can be overwritten
+    // by using a data-autoslide attribute on your slides
+    autoSlide: $options_autoSlide,
+
+    // Stop auto-sliding after user input
+    autoSlideStoppable: $options_autoSlideStoppable,
+
+    // Enable slide navigation via mouse wheel
+    mouseWheel: $options_mouseWheel,
+
+    // Hides the address bar on mobile devices
+    hideAddressBar: $options_hideAddressBar,
+
+    // Opens links in an iframe preview overlay
+    previewLinks: $options_previewLinks,
+
+    // Transition style
+    transition: '$options_transition', // default/none/fade/->slide<-/convex/concave/zoom
+
+    // Transition speed
+    transitionSpeed: '$options_transitionSpeed', // default/fast/slow
+
+    // Transition style for full page slide backgrounds
+    backgroundTransition: '$options_backgroundTransition', // none/fade/slide/convex/concave/zoom
+
+    // Number of slides away from the current that are visible
+    viewDistance: $options_viewDistance,
+
+    // Parallax background image
+    parallaxBackgroundImage: '', // e.g. "'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg'"
+
+    // Parallax background size
+    parallaxBackgroundSize: '', // CSS syntax, e.g. "2100px 900px"
+
+    // Number of pixels to move the parallax background per slide
+    // - Calculated automatically unless specified
+    // - Set to 0 to disable movement along an axis
+    parallaxBackgroundHorizontal: null,
+    parallaxBackgroundVertical: null,
+    
+    // The "normal" size of the presentation, aspect ratio will be preserved
+    // when the presentation is scaled to fit different resolutions. Can be
+    // specified using percentage units.
+    width: $options_width, //960,
+    height: $options_height, //700,
+
+    // Factor of the display size that should remain empty around the content
+    margin: $options_margin, //0.1,
+
+    // Bounds for smallest/largest possible scale to apply to content
+    minScale: $options_minScale, //0.2,
+    maxScale: $options_maxScale, //1.5,
+    
+    dependencies: [
+        // Cross-browser shim that fully implements classList - https://github.com/eligrey/classList.js/
+        { src: '$basePath/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+
+        // Interpret Markdown in <section> elements
+        { src: '$basePath/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+        { src: '$basePath/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+
+        // Syntax highlight for <code> elements
+        { src: '$basePath/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+
+        // Zoom in and out with Alt+click
+        { src: '$basePath/plugin/zoom-js/zoom.js', async: true },
+
+        // Speaker notes
+        { src: '$basePath/plugin/notes/notes.js', async: true } //,
+
+        // MathJax
+        //{ src: '$basePath/plugin/math/math.js', async: true }
+    ]
+});
 </script>
 EOF;
-            $GLOBALS['TL_HOOKS']['parseTemplate'][] = array('Bit3\Contao\Theme\RevealJs\Basic\Hooks', 'parseTemplate');
+            $GLOBALS['TL_HOOKS']['parseTemplate'][] = array('BugBuster\RevealJs\Theme\Hooks', 'parseTemplate');
         }
     }
 

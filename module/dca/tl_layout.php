@@ -1,12 +1,12 @@
 <?php
 
 $GLOBALS['TL_DCA']['tl_layout']['config']['onload_callback'][] = array(
-    'Bit3\Contao\Theme\RevealJs\Basic\Hooks',
+    'BugBuster\RevealJs\Theme\Hooks',
     'loadLayoutDca'
 );
 
 $GLOBALS['TL_DCA']['tl_layout']['config']['onsubmit_callback'][] = array(
-    'Bit3\Contao\Theme\RevealJs\Basic\Hooks',
+    'BugBuster\RevealJs\Theme\Hooks',
     'saveLayout'
 );
 
@@ -18,16 +18,6 @@ $GLOBALS['TL_DCA']['tl_layout']['fields']['useRevealJs'] = array(
     'inputType' => 'checkbox',
     'eval'      => array('submitOnChange' => true),
     'sql'       => "char(1) NOT NULL default ''"
-);
-
-$GLOBALS['TL_DCA']['tl_layout']['fields']['revealJsPrint'] = array(
-    'label'     => &$GLOBALS['TL_LANG']['tl_layout']['revealJsPrint'],
-    'default'   => '',
-    'exclude'   => true,
-    'inputType' => 'select',
-    'options'   => array('pdf', 'paper'),
-    'eval'      => array('includeBlankOption' => true),
-    'sql'       => "char(5) NOT NULL default ''"
 );
 
 $GLOBALS['TL_DCA']['tl_layout']['fields']['revealJsTheme'] = array(
@@ -195,11 +185,11 @@ $GLOBALS['TL_DCA']['tl_layout']['fields']['revealJsPreviewLinks'] = array(
 
 $GLOBALS['TL_DCA']['tl_layout']['fields']['revealJsTransition'] = array(
     'label'     => &$GLOBALS['TL_LANG']['tl_layout']['revealJsTransition'],
-    'default'   => 'default',
+    'default'   => 'slide',
     'exclude'   => true,
     'inputType' => 'select',
-    'options'   => array('default', 'cube', 'page', 'concave', 'zoom', 'linear', 'fade'),
-    'eval'      => array('includeBlankOption' => true),
+    'options'   => array('none', 'fade', 'slide', 'cube', 'page', 'concave', 'convex', 'zoom'),
+    'eval'      => array('includeBlankOption' => false),
     'sql'       => "varchar(16) NOT NULL default 'default'"
 );
 
@@ -214,11 +204,11 @@ $GLOBALS['TL_DCA']['tl_layout']['fields']['revealJsTransitionSpeed'] = array(
 
 $GLOBALS['TL_DCA']['tl_layout']['fields']['revealJsBackgroundTransition'] = array(
     'label'     => &$GLOBALS['TL_LANG']['tl_layout']['revealJsBackgroundTransition'],
-    'default'   => 'default',
+    'default'   => 'fade',
     'exclude'   => true,
     'inputType' => 'select',
-    'options'   => array('default', 'slide', 'concave', 'convex', 'zoom'),
-    'eval'      => array('includeBlankOption' => true),
+    'options'   => array('none', 'fade', 'slide', 'concave', 'convex', 'zoom'),
+    'eval'      => array('includeBlankOption' => false),
     'sql'       => "varchar(16) NOT NULL default 'default'"
 );
 

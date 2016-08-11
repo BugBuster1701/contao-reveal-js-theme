@@ -19,13 +19,13 @@ wieder zu funktionieren.
 * Kompatibel zur Originalversion von Bit3 (Installation und Funktion)
 
 
-### Version 1.x.x (in Planung)
+### Version 1.x.x
 
 * Nicht mehr abwärtskompatibel zur Originalversion (Bit3) oder zur Version 0.1.x
 * Parallele Installation zur Originalversion (Bit3) oder zur Version 0.1.x nicht möglich!
 * Namespace Änderung (Vendor) 
 * Vertical Slides über mehrere Textelemente, nicht mehr über Artikel mit Start/Stop Flag
-* Plugins werden geladen, eventuell wählbar
+* Plugins werden geladen
 * Print-PDF Fähigkeit wie beim Original von reveal.js über manuellem Parameter
 
 

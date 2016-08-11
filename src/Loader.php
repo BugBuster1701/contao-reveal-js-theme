@@ -1,6 +1,6 @@
 <?php
 
-namespace Bit3\Contao\Theme\RevealJs\Basic;
+namespace BugBuster\RevealJs\Theme;
 
 class Loader
 {
@@ -11,6 +11,8 @@ class Loader
             (
                 'fe_reveal'   => 'system/modules/reveal-js/templates',
                 'mod_article' => 'system/modules/reveal-js/templates',
+                'ce_text'     => 'system/modules/reveal-js/templates',
+                'ce_markdown' => 'system/modules/reveal-js/templates',
             )
         );
     }

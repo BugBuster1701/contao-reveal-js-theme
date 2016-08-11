@@ -8,9 +8,8 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2016-07-06T21:07:58+02:00
+ * last-updated: 2016-07-08T22:18:46+02:00
  */
 
-
-$GLOBALS['TL_LANG']['tl_article']['revealSlideNumber'] = 'Slide %s / Seite %s';
+$GLOBALS['TL_LANG']['tl_article']['revealSlideNumber'] = 'Slide %s / Seiten %s';
 

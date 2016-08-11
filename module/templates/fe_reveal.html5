@@ -11,7 +11,7 @@
 	    <meta name="robots" content="<?php echo $this->robots; ?>">
 	    <meta name="description" content="<?php echo $this->description; ?>">
 	    <meta name="keywords" content="<?php echo $this->keywords; ?>">
-	    <meta name="generator" content="Contao Open Source CMS">
+	    <meta name="generator" content="Contao Open Source CMS with reveal.js">
     <?php $this->endblock(); ?>
 
     <?php echo $this->viewport; ?>
@@ -24,7 +24,16 @@
     <!--[if lt IE 9]><script src="<?= TL_ASSETS_URL ?>assets/html5shiv/<?= $GLOBALS['TL_ASSETS']['HTML5SHIV'] ?>/html5shiv-printshiv.min.js"></script><![endif]-->
     <?php $this->endblock(); ?>
   <?php $this->endblock(); ?>
-
+  <!-- Printing and PDF exports -->
+   <script>
+       var prpdf = "<?= $GLOBALS['TL_CONFIG']['revealJsPath'] ?>/<?= $GLOBALS['TL_CONFIG']['revealJsVersion'] ?>/css/print/pdf.css";
+       var prpap = "<?= $GLOBALS['TL_CONFIG']['revealJsPath'] ?>/<?= $GLOBALS['TL_CONFIG']['revealJsVersion'] ?>/css/print/paper.css";
+       var link = document.createElement( 'link' );
+       link.rel = 'stylesheet';
+       link.type = 'text/css';
+       link.href = window.location.search.match( /print-pdf/gi ) ? prpdf : prpap;
+       document.getElementsByTagName( 'head' )[0].appendChild( link );
+  </script>
 </head>
 <body id="top" class="{{ua::class}}<?php if ($this->class) { echo ' ' . $this->class; } ?>"<?php if ($this->onload): ?> onload="<?php echo $this->onload; ?>"<?php endif; ?>>
 
@@ -44,9 +53,6 @@
 	<div class="reveal">
 	    <div class="slides">
 	        <?php echo $this->main; ?>
-	        <?php if (isset($GLOBALS['REVEAL_VERTICAL_SLIDE']) && $GLOBALS['REVEAL_VERTICAL_SLIDE']): ?>
-	            </section>
-	        <?php endif; ?>
 	    </div>
 	</div>
 	<?php $this->endblock(); ?>
